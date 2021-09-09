@@ -1,8 +1,5 @@
 package noticeBoardCrud;
 
-import java.security.Timestamp;
-import java.sql.Date;
-
 /**
  * 게시판 정보를 담은 클래스
  *
@@ -26,10 +23,23 @@ public class Board {
     // 게시글 수정 시간
     private String updateTime;
     
-    
+    // 기본 생성자
     public Board() {}
     
-    
+    /**
+     * 게시판 - 생성자
+     *
+     * @author 유영훈
+     * @since 2021. 9. 9
+     *
+     * @param boardIndex
+     * @param userId
+     * @param id
+     * @param title
+     * @param content
+     * @param createTime
+     * @param updateTime
+     */
     public Board(int boardIndex, String userId, String id, String title, String content, String createTime, String updateTime) {
         this.boardIndex = boardIndex;
         this.userId = userId;
