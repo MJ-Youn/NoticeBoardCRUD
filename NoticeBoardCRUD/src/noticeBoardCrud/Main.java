@@ -92,7 +92,7 @@ public class Main {
                         commentCrud.create(comment);
                         break;
                     case "2":
-                        commentCrud.read();
+                        System.out.println(commentCrud.read());
                         break;
                     case "3":
                         commentCrud.update(comment);
