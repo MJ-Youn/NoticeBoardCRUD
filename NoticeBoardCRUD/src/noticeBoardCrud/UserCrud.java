@@ -27,13 +27,13 @@ public class UserCrud {
      * @author 유영훈
      * @since 2021. 9. 8
      *
-     * @param user  : User class의 필드값을 받아옴
+     * @param user : User class의 필드값을 받아옴
      * 
      * @return createValue : 변동된 row(개수)에 대해 반환
      */
     public int create(User user) {
         int createValue = 0;
-        
+
         ConnectDB connectDB = new ConnectDB();
         Connection connection = null;
         PreparedStatement statement = null;
@@ -53,19 +53,19 @@ public class UserCrud {
                 try {
                     System.out.println("user id : ");
                     user.setId(input.next());
-                    
+
                     System.out.println("user pwd : ");
                     user.setPwd(input.next());
-                    
+
                     System.out.println("user name : ");
                     user.setName(input.next());
-                    
+
                     System.out.println("user age : ");
                     user.setAge(input.nextInt());
-                    
+
                     System.out.println("user gender : ");
                     user.setGender(input.next());
-                    
+
                     break;
                     // type 검사를 위한 NumberFormatException
                 } catch (NumberFormatException e) {
@@ -88,7 +88,7 @@ public class UserCrud {
         } finally {
             connectDB.close(statement, connection);
         }
-        
+
         return createValue;
     }
 
@@ -121,8 +121,7 @@ public class UserCrud {
             // table에 저장된 데이터 확인
             while (resultSet.next()) {
                 // 하나의 레코드를 User 객체에 저장
-                User user = new User(resultSet.getString("id"), resultSet.getString("pwd"), resultSet.getString("name")
-                        , resultSet.getInt("age"), resultSet.getString("gender"));
+                User user = new User(resultSet.getString("id"), resultSet.getString("pwd"), resultSet.getString("name"), resultSet.getInt("age"), resultSet.getString("gender"));
                 // 저장된 객체를 리스트에 저장
                 userList.add(user);
             }
@@ -143,30 +142,39 @@ public class UserCrud {
      * @author 유영훈
      * @since 2021. 9. 8
      *
-     * @param user  : User class의 필드값을 받아옴
+     * @param user : User class의 필드값을 받아옴
      * @return updateValue : 변동된 row(개수)에 대해 반환
      */
     public int update(User user) {
         int updateValue = 0;
-        
+
         ConnectDB connectDB = new ConnectDB();
         Connection connection = null;
         PreparedStatement statement = null;
-        
+
         // update query
         String query = "update user set pwd=?, name=?, age=?, gender=? where id=?";
 
         try {
             connection = connectDB.connectDB();
             statement = connection.prepareStatement(query);
-            
+
             // id 입력
             System.out.println("Enter the id to update");
             user.setId(input.next());
             statement.setString(5, user.getId());
 
-            System.out.println("update user data");
+//            while (statement.executeUpdate() == 0) {
+//                System.out.println("id를 다시 입력하시오");
+//                user.setId(input.next());
+//                statement.setString(5, user.getId());
+//            }
             
+            // id check
+            
+
+            System.out.println("update user data");
+
             // update할 값들 입력 및 type check, id 입력값이 없다면 종료
             while (user.getId() != null) {
                 try {
@@ -191,14 +199,14 @@ public class UserCrud {
             statement.setString(4, user.getGender());
 
             updateValue = statement.executeUpdate();
-        
+
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(1);
         } finally {
             connectDB.close(statement, connection);
         }
-        
+
         return updateValue;
     }
 
@@ -208,44 +216,54 @@ public class UserCrud {
      * @author 유영훈
      * @since 2021. 9. 8
      *
-     * @param user  : User class의 필드값을 받아옴
+     * @param user : User class의 필드값을 받아옴
      * @return deleteValue : 변동된 row(개수)에 대해 반환
      */
     public int delete(User user) {
         int deleteValue = 0;
-        
+
         ConnectDB connectDB = new ConnectDB();
         Connection connection = null;
         PreparedStatement statement = null;
-        
+
         // delete query
         String query = "delete from user where id=?";
-        
+
         try {
 
             connection = connectDB.connectDB();
             statement = connection.prepareStatement(query);
-            
+
             // 삭제할 row의 id 입력
             System.out.println("Delete to input id : ");
             user.setId(input.nextLine());
 
-            // 아이디의 조회를 위해 setString으로 입력값 id를 준다
-            statement.setString(1, user.getId());
-
             // id 유무 체크
+//            List<User> userList = new ArrayList<>();
+//            userList = read();
+//            int index = 0;
+//            while(!(userList.get(index).getId().equals(user.getId()))) {
+//                user.setId(input.nextLine());
+//            }
+//            statement.setString(1, user.getId());
+//            
+            statement.setString(1, user.getId());
+            while (statement.executeUpdate() == 0) {
+                user.setId(input.nextLine());
+                statement.setString(1, user.getId());
+            }
 
             deleteValue = statement.executeUpdate();
 
             System.out.println("Delete Success" + "\n");
-        
+
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(1);
         } finally {
             connectDB.close(statement, connection);
         }
-        
+
         return deleteValue;
     }
 }

@@ -56,7 +56,7 @@ public class Main {
                         userCrud.create(user);
                         break;
                     case "2":
-                        userCrud.read();
+                        System.out.println(userCrud.read());
                         break;
                     case "3":
                         userCrud.update(user);
@@ -74,7 +74,7 @@ public class Main {
                         boardCrud.create(board);
                         break;
                     case "2":
-                        boardCrud.read();
+                        System.out.println(boardCrud.read());
                         break;
                     case "3":
                         boardCrud.update(board);
